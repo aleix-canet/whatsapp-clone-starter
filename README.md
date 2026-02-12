@@ -25,6 +25,11 @@ A real-time chat application frontend built for the **Claude Code Labs** worksho
 - Resizable sidebar panel
 - Dark mode support
 
+## Prerequisites
+
+- [Node.js](https://nodejs.org/) (v18 or later)
+- [pnpm](https://pnpm.io/) (v9 or later)
+
 ## Getting Started
 
 ```bash
