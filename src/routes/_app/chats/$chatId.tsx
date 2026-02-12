@@ -2,11 +2,15 @@ import { createFileRoute, useNavigate, type ErrorComponentProps } from "@tanstac
 import { useEffect, useCallback } from "react"
 import { ChatPanel } from "@/components/chat/chat-panel"
 import { Button } from "@/components/ui/button"
-import { useChats, useMessages, useCurrentUserId, sendMessage } from "@/lib/store"
+import { useChats, useMessages, useCurrentUserId, sendMessage } from "@/stores/app-store"
+import { seo } from "@/lib/seo"
 
 export const Route = createFileRoute("/_app/chats/$chatId")({
   component: ChatPage,
   errorComponent: ChatError,
+  head: () => ({
+    meta: seo({ title: "Chat | WhatsApp Clone" }),
+  }),
 })
 
 function ChatPage() {

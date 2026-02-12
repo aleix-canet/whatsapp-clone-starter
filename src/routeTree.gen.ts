@@ -15,8 +15,12 @@ import { Route as AppIndexRouteImport } from './routes/_app/index'
 import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/_auth/sign-in'
 import { Route as AppSettingsRouteImport } from './routes/_app/settings'
+import { Route as AppContactsRouteImport } from './routes/_app/contacts'
 import { Route as AppChatsRouteImport } from './routes/_app/chats'
+import { Route as AppArchiveRouteImport } from './routes/_app/archive'
+import { Route as AppContactsIndexRouteImport } from './routes/_app/contacts/index'
 import { Route as AppChatsIndexRouteImport } from './routes/_app/chats/index'
+import { Route as AppContactsContactIdRouteImport } from './routes/_app/contacts/$contactId'
 import { Route as AppChatsChatIdRouteImport } from './routes/_app/chats/$chatId'
 
 const AuthRoute = AuthRouteImport.update({
@@ -47,15 +51,35 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AppRoute,
 } as any)
+const AppContactsRoute = AppContactsRouteImport.update({
+  id: '/contacts',
+  path: '/contacts',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppChatsRoute = AppChatsRouteImport.update({
   id: '/chats',
   path: '/chats',
   getParentRoute: () => AppRoute,
 } as any)
+const AppArchiveRoute = AppArchiveRouteImport.update({
+  id: '/archive',
+  path: '/archive',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppContactsIndexRoute = AppContactsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppContactsRoute,
+} as any)
 const AppChatsIndexRoute = AppChatsIndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => AppChatsRoute,
+} as any)
+const AppContactsContactIdRoute = AppContactsContactIdRouteImport.update({
+  id: '/$contactId',
+  path: '/$contactId',
+  getParentRoute: () => AppContactsRoute,
 } as any)
 const AppChatsChatIdRoute = AppChatsChatIdRouteImport.update({
   id: '/$chatId',
@@ -65,56 +89,84 @@ const AppChatsChatIdRoute = AppChatsChatIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof AppIndexRoute
+  '/archive': typeof AppArchiveRoute
   '/chats': typeof AppChatsRouteWithChildren
+  '/contacts': typeof AppContactsRouteWithChildren
   '/settings': typeof AppSettingsRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
   '/chats/$chatId': typeof AppChatsChatIdRoute
+  '/contacts/$contactId': typeof AppContactsContactIdRoute
   '/chats/': typeof AppChatsIndexRoute
+  '/contacts/': typeof AppContactsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof AppIndexRoute
+  '/archive': typeof AppArchiveRoute
   '/settings': typeof AppSettingsRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
   '/chats/$chatId': typeof AppChatsChatIdRoute
+  '/contacts/$contactId': typeof AppContactsContactIdRoute
   '/chats': typeof AppChatsIndexRoute
+  '/contacts': typeof AppContactsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteWithChildren
   '/_auth': typeof AuthRouteWithChildren
+  '/_app/archive': typeof AppArchiveRoute
   '/_app/chats': typeof AppChatsRouteWithChildren
+  '/_app/contacts': typeof AppContactsRouteWithChildren
   '/_app/settings': typeof AppSettingsRoute
   '/_auth/sign-in': typeof AuthSignInRoute
   '/_auth/sign-up': typeof AuthSignUpRoute
   '/_app/': typeof AppIndexRoute
   '/_app/chats/$chatId': typeof AppChatsChatIdRoute
+  '/_app/contacts/$contactId': typeof AppContactsContactIdRoute
   '/_app/chats/': typeof AppChatsIndexRoute
+  '/_app/contacts/': typeof AppContactsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/archive'
     | '/chats'
+    | '/contacts'
     | '/settings'
     | '/sign-in'
     | '/sign-up'
     | '/chats/$chatId'
+    | '/contacts/$contactId'
     | '/chats/'
+    | '/contacts/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/settings' | '/sign-in' | '/sign-up' | '/chats/$chatId' | '/chats'
+  to:
+    | '/'
+    | '/archive'
+    | '/settings'
+    | '/sign-in'
+    | '/sign-up'
+    | '/chats/$chatId'
+    | '/contacts/$contactId'
+    | '/chats'
+    | '/contacts'
   id:
     | '__root__'
     | '/_app'
     | '/_auth'
+    | '/_app/archive'
     | '/_app/chats'
+    | '/_app/contacts'
     | '/_app/settings'
     | '/_auth/sign-in'
     | '/_auth/sign-up'
     | '/_app/'
     | '/_app/chats/$chatId'
+    | '/_app/contacts/$contactId'
     | '/_app/chats/'
+    | '/_app/contacts/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -166,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/contacts': {
+      id: '/_app/contacts'
+      path: '/contacts'
+      fullPath: '/contacts'
+      preLoaderRoute: typeof AppContactsRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/chats': {
       id: '/_app/chats'
       path: '/chats'
@@ -173,12 +232,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppChatsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/archive': {
+      id: '/_app/archive'
+      path: '/archive'
+      fullPath: '/archive'
+      preLoaderRoute: typeof AppArchiveRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/_app/contacts/': {
+      id: '/_app/contacts/'
+      path: '/'
+      fullPath: '/contacts/'
+      preLoaderRoute: typeof AppContactsIndexRouteImport
+      parentRoute: typeof AppContactsRoute
+    }
     '/_app/chats/': {
       id: '/_app/chats/'
       path: '/'
       fullPath: '/chats/'
       preLoaderRoute: typeof AppChatsIndexRouteImport
       parentRoute: typeof AppChatsRoute
+    }
+    '/_app/contacts/$contactId': {
+      id: '/_app/contacts/$contactId'
+      path: '/$contactId'
+      fullPath: '/contacts/$contactId'
+      preLoaderRoute: typeof AppContactsContactIdRouteImport
+      parentRoute: typeof AppContactsRoute
     }
     '/_app/chats/$chatId': {
       id: '/_app/chats/$chatId'
@@ -204,14 +284,32 @@ const AppChatsRouteWithChildren = AppChatsRoute._addFileChildren(
   AppChatsRouteChildren,
 )
 
+interface AppContactsRouteChildren {
+  AppContactsContactIdRoute: typeof AppContactsContactIdRoute
+  AppContactsIndexRoute: typeof AppContactsIndexRoute
+}
+
+const AppContactsRouteChildren: AppContactsRouteChildren = {
+  AppContactsContactIdRoute: AppContactsContactIdRoute,
+  AppContactsIndexRoute: AppContactsIndexRoute,
+}
+
+const AppContactsRouteWithChildren = AppContactsRoute._addFileChildren(
+  AppContactsRouteChildren,
+)
+
 interface AppRouteChildren {
+  AppArchiveRoute: typeof AppArchiveRoute
   AppChatsRoute: typeof AppChatsRouteWithChildren
+  AppContactsRoute: typeof AppContactsRouteWithChildren
   AppSettingsRoute: typeof AppSettingsRoute
   AppIndexRoute: typeof AppIndexRoute
 }
 
 const AppRouteChildren: AppRouteChildren = {
+  AppArchiveRoute: AppArchiveRoute,
   AppChatsRoute: AppChatsRouteWithChildren,
+  AppContactsRoute: AppContactsRouteWithChildren,
   AppSettingsRoute: AppSettingsRoute,
   AppIndexRoute: AppIndexRoute,
 }

@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router"
 import { useState } from "react"
 import { signIn } from "@/lib/auth-client"
+import { seo } from "@/lib/seo"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -16,6 +17,9 @@ import {
 export const Route = createFileRoute("/_auth/sign-in")({
   validateSearch: (search: Record<string, unknown>) => ({
     redirect: (search.redirect as string) || undefined,
+  }),
+  head: () => ({
+    meta: seo({ title: "Sign In | WhatsApp Clone" }),
   }),
   component: SignInPage,
 })

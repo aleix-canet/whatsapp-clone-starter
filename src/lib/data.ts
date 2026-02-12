@@ -98,9 +98,40 @@ export const initialChats: Chat[] = [
     otherUserId: "user-2",
     otherUserOnline: true,
   },
+  {
+    id: "chat-2",
+    type: "direct",
+    name: "Dario Amodei",
+    avatar: undefined,
+    lastMessage: "Have an amazing hackathon session! Build something awesome 🚀",
+    lastMessageAt: new Date(Date.now() - 30000).toISOString(),
+    unreadCount: 1,
+    otherUserId: "user-7",
+    otherUserOnline: true,
+  },
 ]
 
 export const initialMessages: Record<string, Message[]> = {
+  "chat-2": [
+    {
+      id: "msg-4",
+      chatId: "chat-2",
+      senderId: "user-7",
+      type: "text",
+      content: "Hey there! Dario here from Anthropic. Just wanted to drop in and wish you an incredible hackathon session today! 🎉",
+      createdAt: new Date(Date.now() - 120000).toISOString(),
+      updatedAt: new Date(Date.now() - 120000).toISOString(),
+    },
+    {
+      id: "msg-5",
+      chatId: "chat-2",
+      senderId: "user-7",
+      type: "text",
+      content: "Have an amazing hackathon session! Build something awesome 🚀",
+      createdAt: new Date(Date.now() - 30000).toISOString(),
+      updatedAt: new Date(Date.now() - 30000).toISOString(),
+    },
+  ],
   "chat-1": [
     {
       id: "msg-1",
@@ -140,4 +171,9 @@ export function nextMessageId(): string {
 let chatCounter = 100
 export function nextChatId(): string {
   return `chat-${++chatCounter}`
+}
+
+let requestCounter = 100
+export function nextRequestId(): string {
+  return `request-${++requestCounter}`
 }

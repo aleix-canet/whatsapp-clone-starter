@@ -1,10 +1,12 @@
 import { Link, useLocation } from "@tanstack/react-router"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Message01Icon, Settings01Icon } from "@hugeicons/core-free-icons"
+import { Message01Icon, Settings01Icon, ContactBookIcon, Archive02Icon } from "@hugeicons/core-free-icons"
 import { cn } from "@/lib/utils"
 
 const navItems = [
   { to: "/chats", icon: Message01Icon, label: "Chats" },
+  { to: "/contacts", icon: ContactBookIcon, label: "Contacts" },
+  { to: "/archive", icon: Archive02Icon, label: "Archive" },
 ] as const
 
 export function AppSidebar() {

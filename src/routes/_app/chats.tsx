@@ -1,6 +1,6 @@
 import { createFileRoute, Outlet } from "@tanstack/react-router"
 import { ChatSidebar } from "@/components/chat/chat-sidebar"
-import { useChats } from "@/lib/store"
+import { useChats } from "@/stores/app-store"
 import {
   ResizablePanelGroup,
   ResizablePanel,

@@ -13,11 +13,15 @@ import {
   LogoutIcon,
   Camera01Icon,
 } from "@hugeicons/core-free-icons"
-import { useCurrentUser } from "@/lib/store"
+import { useCurrentUser } from "@/stores/app-store"
 import { useSession, signOut } from "@/lib/auth-client"
+import { seo } from "@/lib/seo"
 
 export const Route = createFileRoute("/_app/settings")({
   component: SettingsPage,
+  head: () => ({
+    meta: seo({ title: "Settings | WhatsApp Clone" }),
+  }),
 })
 
 function SettingsPage() {

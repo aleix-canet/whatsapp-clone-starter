@@ -1,7 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router"
+import { seo } from "@/lib/seo"
 
 export const Route = createFileRoute("/_app/chats/")({
   component: ChatsIndexPage,
+  head: () => ({
+    meta: seo({ title: "Chats | WhatsApp Clone" }),
+  }),
 })
 
 function ChatsIndexPage() {

@@ -24,6 +24,8 @@
     --warning: #B07D3A;
     --warning-bg: #F0E8D6;
     --danger: #B5533E;
+    --bonus: #7C6BBF;
+    --bonus-bg: #EDE8F5;
     --shadow: 0 1px 2px rgba(20,20,19,0.04);
     --shadow-lg: 0 4px 16px rgba(20,20,19,0.08);
     --radius: 10px;
@@ -49,6 +51,8 @@
       --success-bg: #1E2B1E;
       --warning: #D4A656;
       --warning-bg: #2B2212;
+      --bonus: #A594E0;
+      --bonus-bg: #1E1A2E;
       --shadow: 0 1px 2px rgba(0,0,0,0.2);
       --shadow-lg: 0 4px 16px rgba(0,0,0,0.25);
     }
@@ -200,6 +204,9 @@
   }
 
   .card:hover { box-shadow: var(--shadow-lg); border-color: var(--primary); }
+
+  .card.bonus:hover { border-color: var(--bonus); }
+  .card.bonus .card-number { background: var(--bonus); }
 
   .card.completed { border-left: 3px solid var(--success); }
   .card.completed:hover { border-color: var(--success); border-left: 3px solid var(--success); }
@@ -695,7 +702,7 @@
       <span class="header-badge">Workshop</span>
     </div>
     <div class="progress-bar-container">
-      <span id="progressText">0 / 7</span>
+      <span id="progressText">0 / 5</span>
       <div class="progress-bar">
         <div class="progress-bar-fill" id="progressFill" style="width: 0%"></div>
       </div>
@@ -728,16 +735,13 @@
         Open your terminal in the project root. Create a <code>.env</code> file (or update the existing one) with the real API URLs:
         <pre><code>VITE_API_BASE_URL=https://backend-production-12809.up.railway.app
 VITE_WS_URL=wss://backend-production-12809.up.railway.app/ws</code></pre>
-        <em style="font-size:0.82rem;color:var(--text-muted);">(The instructor will provide the actual API URL.)</em>
       </li>
       <li>
-        Install dependencies and start the dev server:
-        <pre><code>pnpm install
-pnpm dev</code></pre>
+        Install dependencies:
+        <pre><code>pnpm install</code></pre>
       </li>
-      <li>Open <code>http://localhost:5173</code> in your browser. You should be redirected to the sign-in page. Create an account with email and password, then sign in. You should see an empty chat list.</li>
       <li>
-        Open a separate terminal in the same directory and launch Claude Code:
+        Launch Claude Code:
         <pre><code>claude</code></pre>
       </li>
     </ol>
@@ -913,6 +917,36 @@ pnpm dev</code></pre>
     </ul>
   </div>
 
+  <!-- Step 4: Custom Skills -->
+  <div class="info-card">
+    <h3>Step 4: Create a Custom Skill (~5 min)</h3>
+    <p style="font-size:0.9rem;margin-bottom:0.75rem;">Skills are reusable slash commands you can invoke anytime with <code>/skill-name</code>. Each skill is a <code>.md</code> file in <code>.claude/skills/</code> that defines a prompt template Claude will follow when triggered.</p>
+
+    <p style="font-size:0.9rem;margin-bottom:0.75rem;">Create a <strong>commit</strong> skill that commits your changes following the <a href="https://www.conventionalcommits.org/" target="_blank" style="color:var(--whatsapp-green);">Conventional Commits</a> specification:</p>
+
+    <p style="font-size:0.9rem;margin-bottom:0.5rem;"><strong>Commit Skill</strong> (<code>.claude/skills/commit.md</code>)</p>
+    <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:1rem;">A skill that stages and commits changes using Conventional Commits format (e.g. <code>feat:</code>, <code>fix:</code>, <code>refactor:</code>, <code>docs:</code>). It should look at the current diff, pick the right type and scope, and write a clear commit message.</p>
+
+    <p style="font-size:0.9rem;margin-bottom:0.75rem;">Ask Claude Code to create this skill file for you, then verify it works:</p>
+    <div class="prompt-box">
+      <span class="prompt-label">Claude Code</span>
+      <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+/commit</div>
+
+    <details class="hints-toggle">
+      <summary>Tip: another useful skill idea</summary>
+      <div class="hints-content">
+        <p style="font-size:0.88rem;">You can also create a <strong>changes</strong> skill (<code>.claude/skills/changes.md</code>) that lists and summarizes all current changes in the repo &mdash; staged, unstaged, and untracked files. This is handy to get a quick overview of what you have been working on before committing.</p>
+      </div>
+    </details>
+
+    <h3>What you should see</h3>
+    <ul class="checklist" data-feature="step4">
+      <li onclick="toggleCheck(this)">A <code>commit.md</code> file exists in <code>.claude/skills/</code></li>
+      <li onclick="toggleCheck(this)">Running <code>/commit</code> stages changes and creates a commit with a Conventional Commits message</li>
+    </ul>
+  </div>
+
   <!-- ============ HOUR 1 ============ -->
   <div class="section-label">
     <span class="hour-badge hour1">Hour 1</span>
@@ -926,52 +960,57 @@ pnpm dev</code></pre>
     <div class="card-header" onclick="toggleCard(this.parentElement)">
       <div class="card-number"><span>1</span></div>
       <div class="card-info">
-        <div class="card-title">Contacts Page</div>
-        <div class="card-meta">~20 min &middot; New Route, Tabs, Dialog, Resizable Panels</div>
+        <div class="card-title">Emoji Picker</div>
+        <div class="card-meta">~10 min &middot; Popover, Tabs, Input Integration</div>
       </div>
       <div class="card-chevron">&#x276F;</div>
     </div>
     <div class="card-body">
-      <p>The app needs a contacts page where users can view their contacts, see pending requests, and send new contact requests.</p>
+      <p>The message input currently has only a text field and send button. Add an emoji picker button that opens a popover with categorized emojis.</p>
 
       <h3>How to prompt this</h3>
-      <p style="font-size:0.88rem;margin-bottom:0.75rem;">This is a full-page feature. Describe the layout and each section:</p>
+      <p style="font-size:0.88rem;margin-bottom:0.75rem;">Describe the UI you want and where it goes:</p>
       <ul style="font-size:0.88rem;padding-left:1.5rem;margin-bottom:0.5rem;">
-        <li><strong>Layout:</strong> a two-panel page (sidebar + content) using shadcn ResizablePanel</li>
-        <li><strong>Contacts tab:</strong> list of accepted contacts with search</li>
-        <li><strong>Requests tab:</strong> pending inbound requests (accept/reject) and outbound requests (cancel), with a badge count</li>
-        <li><strong>Add contact:</strong> a dialog to send a request by email or username</li>
-        <li><strong>Sidebar nav:</strong> a Contacts icon in the app sidebar</li>
-        <li>Tell Claude that all query options and mutations <strong>already exist</strong> in <code>src/queries/contacts.ts</code></li>
+        <li>Placement: where does the button go relative to the message input?</li>
+        <li>Behavior: what opens? What's inside? (categories with emoji grids)</li>
+        <li>Integration: what happens when an emoji is clicked? (inserted into the input)</li>
+        <li>Suggest a new component file and how it connects to <code>ChatPanel</code></li>
+        <li><strong>Do not use any third-party emoji picker library</strong> &mdash; build it with hardcoded emoji strings and shadcn/ui primitives</li>
       </ul>
 
       <div class="callout" style="margin:0.75rem 0;">
         <span class="callout-icon">&#x1f4a1;</span>
-        <div><strong>Prompting lesson:</strong> For new pages, describe the layout structure (panels, tabs, dialogs) and point Claude to existing data hooks. This is the biggest feature &mdash; if Claude's output is not quite right, iterate: describe what is wrong and ask it to fix it.</div>
+        <div><strong>Prompting lesson:</strong> When describing UI, focus on <em>behavior</em> not implementation. Say "opens a popover above the input with emoji categories" rather than trying to describe the code structure.</div>
       </div>
 
       <details class="hints-toggle">
         <summary>Hints &amp; key files</summary>
         <div class="hints-content">
           <ul>
-            <li>Route file: <code>src/routes/_app/contacts.tsx</code> (new file)</li>
-            <li>App sidebar: <code>src/components/app-sidebar.tsx</code> (add Contacts nav item)</li>
-            <li>All queries and mutations exist in <code>src/queries/contacts.ts</code>: <code>contactsQueryOptions</code>, <code>pendingRequestsQueryOptions</code>, <code>useSendContactRequest</code>, <code>useAcceptContactRequest</code>, etc.</li>
-            <li>Pending requests have <code>direction: "inbound" | "outbound"</code></li>
-            <li>Use shadcn <code>ResizablePanel</code>, <code>Tabs</code>, and <code>Dialog</code> components</li>
-            <li>After creating the route, you may need to restart the dev server for TanStack Router to regenerate</li>
-            <li>Check the <strong>Swagger docs</strong> (see Reference section) for the <code>/contacts</code> endpoints to see exact request/response shapes</li>
+            <li><code>ChatPanel</code> is in <code>src/components/chat/chat-panel.tsx</code> &mdash; manages <code>inputValue</code> state</li>
+            <li>The input uses <code>InputGroup</code>, <code>InputGroupAddon</code>, <code>InputGroupInput</code></li>
+            <li>No emoji library needed &mdash; hardcoded emoji strings work fine</li>
+            <li>Use shadcn <code>Popover</code> with <code>side="top"</code> so it opens above the input</li>
           </ul>
+        </div>
+      </details>
+
+      <details class="hints-toggle">
+        <summary>Prompt</summary>
+        <div class="hints-content">
+          <div class="prompt-box">
+            <span class="prompt-label">Prompt</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+Add an emoji picker to the chat message input in ChatPanel. Place a smiley face icon button to the left of the text input. Clicking it should open a shadcn Popover (side="top") with categorized emoji tabs (Smileys, People, Animals, Food, Travel, Objects, Symbols). Each category shows a grid of hardcoded emoji strings. Clicking an emoji inserts it into the message input and keeps the popover open. Do not use any third-party emoji picker library — build it with hardcoded emoji strings and shadcn/ui primitives only. Create a new EmojiPicker component in src/components/chat/ and integrate it into ChatPanel.</div>
         </div>
       </details>
 
       <h3>What you should see</h3>
       <ul class="checklist" data-feature="1">
-        <li onclick="toggleCheck(this)">A contacts icon appears in the left sidebar navigation</li>
-        <li onclick="toggleCheck(this)">Clicking it shows the contacts page with a sidebar listing contacts</li>
-        <li onclick="toggleCheck(this)">The "Add Contact" button opens a dialog to send a request by email or username</li>
-        <li onclick="toggleCheck(this)">The "Requests" tab shows pending requests with accept/reject/cancel buttons</li>
-        <li onclick="toggleCheck(this)">The notification badge shows the count of incoming requests</li>
+        <li onclick="toggleCheck(this)">A smiley face icon button appears to the left of the message input</li>
+        <li onclick="toggleCheck(this)">Clicking it opens a popover above the input with emoji categories</li>
+        <li onclick="toggleCheck(this)">Clicking a category tab switches the displayed emojis</li>
+        <li onclick="toggleCheck(this)">Clicking an emoji inserts it into the message input field</li>
       </ul>
 
       <button class="complete-btn" onclick="markComplete(1, this)">Mark as Complete</button>
@@ -1017,13 +1056,22 @@ pnpm dev</code></pre>
         </div>
       </details>
 
+      <details class="hints-toggle">
+        <summary>Prompt</summary>
+        <div class="hints-content">
+          <div class="prompt-box">
+            <span class="prompt-label">Prompt</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+Add a "new chat" button to the ChatSidebar header, next to the "Chats" title. Clicking it opens a shadcn Popover with a search input and a list of contacts. Use the existing contactsQueryOptions to fetch contacts and the existing useCreateDirectChat mutation to create the chat. Typing in the search field filters the contacts list in real time. Clicking a contact creates a direct chat using useCreateDirectChat and navigates to the new chat. Close the popover after selection.</div>
+        </div>
+      </details>
+
       <h3>What you should see</h3>
       <ul class="checklist" data-feature="2">
         <li onclick="toggleCheck(this)">A "+" button appears in the chat sidebar header</li>
         <li onclick="toggleCheck(this)">Clicking it opens a popover with a search field and your contacts list</li>
         <li onclick="toggleCheck(this)">Typing in the search field filters the list</li>
         <li onclick="toggleCheck(this)">Clicking a contact creates a new chat and navigates to it</li>
-        <li onclick="toggleCheck(this)">Your real contacts appear (add contacts first via the Contacts page)</li>
       </ul>
 
       <button class="complete-btn" onclick="markComplete(2, this)">Mark as Complete</button>
@@ -1034,57 +1082,6 @@ pnpm dev</code></pre>
   <div class="card" id="feature-3" data-feature="3">
     <div class="card-header" onclick="toggleCard(this.parentElement)">
       <div class="card-number"><span>3</span></div>
-      <div class="card-info">
-        <div class="card-title">Emoji Picker</div>
-        <div class="card-meta">~10 min &middot; Popover, Tabs, Input Integration</div>
-      </div>
-      <div class="card-chevron">&#x276F;</div>
-    </div>
-    <div class="card-body">
-      <p>The message input currently has only a text field and send button. Add an emoji picker button that opens a popover with categorized emojis.</p>
-
-      <h3>How to prompt this</h3>
-      <p style="font-size:0.88rem;margin-bottom:0.75rem;">Describe the UI you want and where it goes:</p>
-      <ul style="font-size:0.88rem;padding-left:1.5rem;margin-bottom:0.5rem;">
-        <li>Placement: where does the button go relative to the message input?</li>
-        <li>Behavior: what opens? What's inside? (categories with emoji grids)</li>
-        <li>Integration: what happens when an emoji is clicked? (inserted into the input)</li>
-        <li>Suggest a new component file and how it connects to <code>ChatPanel</code></li>
-      </ul>
-
-      <div class="callout" style="margin:0.75rem 0;">
-        <span class="callout-icon">&#x1f4a1;</span>
-        <div><strong>Prompting lesson:</strong> When describing UI, focus on <em>behavior</em> not implementation. Say "opens a popover above the input with emoji categories" rather than trying to describe the code structure.</div>
-      </div>
-
-      <details class="hints-toggle">
-        <summary>Hints &amp; key files</summary>
-        <div class="hints-content">
-          <ul>
-            <li><code>ChatPanel</code> is in <code>src/components/chat/chat-panel.tsx</code> &mdash; manages <code>inputValue</code> state</li>
-            <li>The input uses <code>InputGroup</code>, <code>InputGroupAddon</code>, <code>InputGroupInput</code></li>
-            <li>No emoji library needed &mdash; hardcoded emoji strings work fine</li>
-            <li>Use shadcn <code>Popover</code> with <code>side="top"</code> so it opens above the input</li>
-          </ul>
-        </div>
-      </details>
-
-      <h3>What you should see</h3>
-      <ul class="checklist" data-feature="3">
-        <li onclick="toggleCheck(this)">A smiley face icon button appears to the left of the message input</li>
-        <li onclick="toggleCheck(this)">Clicking it opens a popover above the input with emoji categories</li>
-        <li onclick="toggleCheck(this)">Clicking a category tab switches the displayed emojis</li>
-        <li onclick="toggleCheck(this)">Clicking an emoji inserts it into the message input field</li>
-      </ul>
-
-      <button class="complete-btn" onclick="markComplete(3, this)">Mark as Complete</button>
-    </div>
-  </div>
-
-  <!-- Feature 4 -->
-  <div class="card" id="feature-4" data-feature="4">
-    <div class="card-header" onclick="toggleCard(this.parentElement)">
-      <div class="card-number"><span>4</span></div>
       <div class="card-info">
         <div class="card-title">Pin &amp; Archive Chats</div>
         <div class="card-meta">~15 min &middot; Mutations, Optimistic Updates, New Route</div>
@@ -1124,8 +1121,18 @@ pnpm dev</code></pre>
         </div>
       </details>
 
+      <details class="hints-toggle">
+        <summary>Prompt</summary>
+        <div class="hints-content">
+          <div class="prompt-box">
+            <span class="prompt-label">Prompt</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+Add a right-click context menu to chat list items in ChatListItem with Pin/Unpin, Archive, and Delete options. Use shadcn ContextMenu. Pinned chats should sort to the top of the chat list and show a pin icon. Archived chats should be removed from the main chat list. Create a new archive route at /_app/archive that displays archived chats with an Unarchive button. Add an Archive navigation icon to the app sidebar. Use optimistic updates for all mutations so the UI responds instantly. The Chat type already has pinnedAt and archivedAt fields. Add mutations in src/queries/chats.ts and API functions in src/lib/api/chats.ts. Check the Swagger docs at https://backend-production-12809.up.railway.app/swagger for the /chats endpoints.</div>
+        </div>
+      </details>
+
       <h3>What you should see</h3>
-      <ul class="checklist" data-feature="4">
+      <ul class="checklist" data-feature="3">
         <li onclick="toggleCheck(this)">Right-clicking a chat shows Archive, Pin/Unpin, and Delete options</li>
         <li onclick="toggleCheck(this)">Pinning a chat moves it to the top with a pin icon</li>
         <li onclick="toggleCheck(this)">Archiving a chat removes it from the main list</li>
@@ -1134,7 +1141,72 @@ pnpm dev</code></pre>
         <li onclick="toggleCheck(this)">Unarchiving returns the chat to the main list</li>
       </ul>
 
-      <button class="complete-btn" onclick="markComplete(4, this)">Mark as Complete</button>
+      <button class="complete-btn" onclick="markComplete(3, this)">Mark as Complete</button>
+    </div>
+  </div>
+
+  <!-- Bonus: Attachments -->
+  <div class="card bonus" id="feature-bonus-attachments" data-feature="bonus-attachments">
+    <div class="card-header" onclick="toggleCard(this.parentElement)">
+      <div class="card-number"><span>&#x2605;</span></div>
+      <div class="card-info">
+        <div class="card-title">Bonus: Add Attachments</div>
+        <div class="card-meta">~15 min &middot; File Upload, Preview, Message Integration</div>
+      </div>
+      <div class="card-chevron">&#x276F;</div>
+    </div>
+    <div class="card-body">
+      <p>Messages are text-only right now. Add the ability to attach files (images, documents) to messages so users can share media in their chats.</p>
+
+      <h3>How to prompt this</h3>
+      <p style="font-size:0.88rem;margin-bottom:0.75rem;">Describe the attachment flow end to end:</p>
+      <ul style="font-size:0.88rem;padding-left:1.5rem;margin-bottom:0.5rem;">
+        <li>An attachment button (paperclip icon) next to the message input</li>
+        <li>Clicking it opens a file picker (images, documents, etc.)</li>
+        <li>Selected files show a preview above the input before sending</li>
+        <li>Users can remove a selected file before sending</li>
+        <li>When sent, the message includes the attachment &mdash; images display inline, other files show as a download link</li>
+        <li>Point Claude to the <strong>existing upload endpoint</strong> and the <code>Message</code> type's attachment fields</li>
+      </ul>
+
+      <div class="callout" style="margin:0.75rem 0;">
+        <span class="callout-icon">&#x1f4a1;</span>
+        <div><strong>Prompting lesson:</strong> For features that span the input area and the message display, describe both sides: what the <em>sender</em> sees (file picker, preview, remove) and what the <em>receiver</em> sees (inline image or download link).</div>
+      </div>
+
+      <details class="hints-toggle">
+        <summary>Hints &amp; key files</summary>
+        <div class="hints-content">
+          <ul>
+            <li><code>ChatPanel</code> in <code>src/components/chat/chat-panel.tsx</code> &mdash; add the attachment button and preview area</li>
+            <li><code>MessageBubble</code> in <code>src/components/chat/message-bubble.tsx</code> &mdash; render attachments in messages</li>
+            <li>The upload endpoint is <code>POST /api/upload</code> &mdash; check the <strong>Swagger docs</strong> for the request/response shape</li>
+            <li>The <code>Message</code> type has optional attachment fields (<code>fileUrl</code>, <code>fileName</code>, <code>fileType</code>)</li>
+            <li>Use a hidden <code>&lt;input type="file"&gt;</code> triggered by the paperclip button</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="hints-toggle">
+        <summary>Prompt</summary>
+        <div class="hints-content">
+          <div class="prompt-box">
+            <span class="prompt-label">Prompt</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+Add file attachment support to the chat. Place a paperclip icon button next to the message input in ChatPanel. Clicking it opens a file picker via a hidden &lt;input type="file"&gt;. Selected files show a preview area above the input — images show a thumbnail, other files show the filename — with a remove button to cancel. When sending, upload the file to POST /api/upload first, then send the message with the attachment fields. In MessageBubble, render image attachments inline and other file types as a download link. The Message type already has fileUrl, fileName, and fileType optional fields. Check the Swagger docs at https://backend-production-12809.up.railway.app/swagger for the upload endpoint request/response shape.</div>
+        </div>
+      </details>
+
+      <h3>What you should see</h3>
+      <ul class="checklist" data-feature="bonus-attachments">
+        <li onclick="toggleCheck(this)">A paperclip icon button appears next to the message input</li>
+        <li onclick="toggleCheck(this)">Clicking it opens the file picker</li>
+        <li onclick="toggleCheck(this)">Selected files show a preview above the input with a remove button</li>
+        <li onclick="toggleCheck(this)">Sending a message with an image shows the image inline in the chat</li>
+        <li onclick="toggleCheck(this)">Sending a non-image file shows a download link in the message</li>
+      </ul>
+
+      <button class="complete-btn" onclick="markComplete('bonus-attachments', this)">Mark as Complete</button>
     </div>
   </div>
 
@@ -1144,136 +1216,121 @@ pnpm dev</code></pre>
     <h2>Real-time Layer (~1 hour)</h2>
   </div>
 
-  <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:1.25rem;">Your UI features are built and connected to the REST API. But the app has no real-time updates &mdash; new messages only appear on refresh. In this hour you will build the entire WebSocket layer from scratch: a typed client, a state store, and a hook that syncs live events into the TanStack Query cache.</p>
+  <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:1.25rem;">Your UI features are built and connected to the REST API. But the chat page still uses mock data and has no real-time updates. The good news: the project already has a complete WebSocket infrastructure &mdash; a typed client, a state store, and a hook that syncs live events into the TanStack Query cache. In this hour you will explore those existing hooks and wire them into the app.</p>
 
-  <!-- Step 5: WebSocket Client & Types -->
+  <!-- Step 4: Explore & Wire Up the Chat Page -->
+  <div class="card" id="feature-4" data-feature="4">
+    <div class="card-header" onclick="toggleCard(this.parentElement)">
+      <div class="card-number"><span>4</span></div>
+      <div class="card-info">
+        <div class="card-title">Explore &amp; Wire Up the Chat Page</div>
+        <div class="card-meta">~20 min &middot; Codebase Exploration, Hook Integration, Real-time Wiring</div>
+      </div>
+      <div class="card-chevron">&#x276F;</div>
+    </div>
+    <div class="card-body">
+      <p>The project already has a complete WebSocket infrastructure ready to use &mdash; a typed client (<code>src/lib/ws-client.ts</code>), a state store (<code>src/stores/ws-store.ts</code>), and a hook that syncs real-time events into the TanStack Query cache (<code>src/hooks/use-websocket.ts</code>). But right now, the chat page uses <strong>mock data</strong> from <code>src/stores/app-store.tsx</code> and none of the real-time hooks are connected. Your job is to wire everything up.</p>
+
+      <h3>How to prompt this</h3>
+      <p style="font-size:0.88rem;margin-bottom:0.75rem;">Start by asking Claude to <strong>explore the existing infrastructure</strong>, then ask it to wire everything together. You need two things to happen:</p>
+      <ul style="font-size:0.88rem;padding-left:1.5rem;margin-bottom:0.5rem;">
+        <li><strong>Mount the WebSocket hook:</strong> <code>useWebSocketConnection()</code> from <code>src/hooks/use-websocket.ts</code> needs to be called in <code>src/routes/_app.tsx</code> so the WebSocket connects for all authenticated routes</li>
+        <li><strong>Replace mock data with real queries:</strong> The chat page at <code>src/routes/_app/chats/$chatId.tsx</code> currently imports from <code>app-store</code> (mock data). It needs to switch to real TanStack Query hooks using the query options from <code>src/queries/chats.ts</code> and the WebSocket hooks from <code>src/hooks/use-websocket.ts</code></li>
+      </ul>
+      <p style="font-size:0.88rem;margin-bottom:0.5rem;">The chat page should use these hooks:</p>
+      <ul style="font-size:0.88rem;padding-left:1.5rem;margin-bottom:0.5rem;">
+        <li><code>useSuspenseQuery(chatsQueryOptions)</code> &mdash; get the chat list to find the current chat</li>
+        <li><code>useSuspenseInfiniteQuery(messagesQueryOptions(chatId))</code> &mdash; paginated messages with cursor-based loading</li>
+        <li><code>useTypingIndicator(chatId)</code> &mdash; send typing events when the user types</li>
+        <li><code>useTypingUsers(chatId)</code> &mdash; show who is typing in this chat</li>
+        <li><code>useCurrentUserId()</code> &mdash; identify the current user for message alignment</li>
+        <li>Message sending via the API function <code>sendMessage()</code> from <code>src/lib/api/chats.ts</code> with <strong>optimistic updates</strong> to the query cache</li>
+      </ul>
+
+      <div class="callout" style="margin:0.75rem 0;">
+        <span class="callout-icon">&#x1f4a1;</span>
+        <div><strong>Prompting lesson:</strong> When wiring up existing code, the most effective prompt tells Claude to <em>read specific files first</em> before making changes. Say "read <code>src/hooks/use-websocket.ts</code> and <code>src/queries/chats.ts</code>, then update the chat page to use them." This prevents Claude from reinventing things that already exist.</div>
+      </div>
+
+      <details class="hints-toggle">
+        <summary>Hints &amp; key files</summary>
+        <div class="hints-content">
+          <ul>
+            <li><strong>Existing WebSocket hook:</strong> <code>src/hooks/use-websocket.ts</code> exports <code>useWebSocketConnection</code> (mount once in <code>_app.tsx</code>) and <code>useTypingIndicator(chatId)</code></li>
+            <li><strong>Existing store:</strong> <code>src/stores/ws-store.ts</code> exports <code>useTypingUsers(chatId)</code>, <code>useIsUserOnline(userId)</code>, <code>useConnectionStatus()</code></li>
+            <li><strong>Query options:</strong> <code>src/queries/chats.ts</code> has <code>chatsQueryOptions</code>, <code>messagesQueryOptions(chatId)</code>, <code>chatDetailsQueryOptions(chatId)</code></li>
+            <li><strong>API functions:</strong> <code>src/lib/api/chats.ts</code> has <code>sendMessage(chatId, data)</code>, <code>fetchChats()</code>, <code>fetchMessages(chatId, cursor)</code></li>
+            <li><strong>Mock data to replace:</strong> <code>src/stores/app-store.tsx</code> &mdash; the chat page currently imports <code>useChats()</code>, <code>useMessages()</code>, <code>sendMessage()</code> from here</li>
+            <li>Messages use <code>infiniteQueryOptions</code> with cursor-based pagination &mdash; the first page is the most recent</li>
+            <li>For optimistic message sending: create a temp message with <code>temp-{timestamp}</code> ID, add it to the cache, then replace with the real one on API success</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="hints-toggle">
+        <summary>Prompt</summary>
+        <div class="hints-content">
+          <div class="prompt-box">
+            <span class="prompt-label">Prompt</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+Read these files first to understand the existing infrastructure:
+- src/hooks/use-websocket.ts (WebSocket connection hook and typing indicator)
+- src/stores/ws-store.ts (ephemeral state: typing users, online status)
+- src/queries/chats.ts (TanStack Query options for chats and messages)
+- src/lib/api/chats.ts (API functions for sending messages, fetching data)
+- src/routes/_app.tsx (app layout)
+- src/routes/_app/chats/$chatId.tsx (current chat page using mock data)
+
+Then make these changes:
+
+1. Mount useWebSocketConnection() in src/routes/_app.tsx so the WebSocket connects automatically for all authenticated routes.
+
+2. Rewrite the chat page (src/routes/_app/chats/$chatId.tsx) to use real data instead of the mock app-store:
+   - Use useSuspenseQuery(chatsQueryOptions) to get the chat list and find the current chat
+   - Use useSuspenseInfiniteQuery(messagesQueryOptions(chatId)) for paginated messages
+   - Use useTypingIndicator(chatId) to send typing events when the user types in the input
+   - Use useTypingUsers(chatId) to display a typing indicator below the messages
+   - Use useCurrentUserId() instead of the mock current user
+   - Send messages using the sendMessage() API function from src/lib/api/chats.ts with optimistic updates — create a temp message with a temp-{timestamp} ID, add it to the query cache immediately, then replace with the real response on success
+   - Remove all imports from src/stores/app-store.tsx</div>
+        </div>
+      </details>
+
+      <h3>What you should see</h3>
+      <ul class="checklist" data-feature="4">
+        <li onclick="toggleCheck(this)">WebSocket connects automatically when you sign in (check Network tab for WS connection)</li>
+        <li onclick="toggleCheck(this)">The chat page loads real messages from the API instead of mock data</li>
+        <li onclick="toggleCheck(this)">Sending a message appears instantly (optimistic update) and persists after refresh</li>
+        <li onclick="toggleCheck(this)">Typing in the input sends typing events (other users see "typing..." indicator)</li>
+        <li onclick="toggleCheck(this)">New messages from other users appear in real time without refreshing</li>
+      </ul>
+
+      <button class="complete-btn" onclick="markComplete(4, this)">Mark as Complete</button>
+    </div>
+  </div>
+
+  <!-- Step 5: Go Live -->
   <div class="card" id="feature-5" data-feature="5">
     <div class="card-header" onclick="toggleCard(this.parentElement)">
       <div class="card-number"><span>5</span></div>
       <div class="card-info">
-        <div class="card-title">Create WebSocket Client &amp; Types</div>
-        <div class="card-meta">~20 min &middot; WSClient Singleton, TypeScript Types, TanStack Store</div>
-      </div>
-      <div class="card-chevron">&#x276F;</div>
-    </div>
-    <div class="card-body">
-      <p>The app needs a WebSocket client that connects to the backend, handles reconnection, queues messages while disconnected, and provides a typed event system. You will also create the TypeScript types for the WebSocket protocol and a TanStack Store for ephemeral real-time state.</p>
-
-      <h3>How to prompt this</h3>
-      <p style="font-size:0.88rem;margin-bottom:0.75rem;">This is a multi-file infrastructure step. Tell Claude to create three files:</p>
-      <ul style="font-size:0.88rem;padding-left:1.5rem;margin-bottom:0.5rem;">
-        <li><strong><code>src/lib/ws-types.ts</code></strong> &mdash; TypeScript types for the WebSocket protocol. Define a <code>WSMessageType</code> union of all event names, a generic <code>WSMessage</code> envelope (<code>{ type, payload }</code>), payload interfaces for each event, and a <code>ConnectionStatus</code> type. Use the <strong>WebSocket Events table</strong> in the Reference section for the full list of event names and payload shapes. You can paste the table directly into your prompt so Claude gets the exact contract.</li>
-        <li><strong><code>src/lib/ws-client.ts</code></strong> &mdash; A singleton <code>WSClient</code> class wrapping <code>reconnecting-websocket</code>. It should manage connection/disconnection, expose typed event helpers (<code>onMessage()</code>, <code>onTyping()</code>, <code>onUserOnline()</code>, etc.), queue outgoing messages while disconnected, and provide methods for client-to-server events (<code>subscribe</code>, <code>unsubscribe</code>, <code>sendTyping</code>, <code>sendStopTyping</code>). The WebSocket URL comes from <code>import.meta.env.VITE_WS_URL</code>.</li>
-        <li><strong><code>src/stores/ws-store.ts</code></strong> &mdash; A TanStack Store for ephemeral state: connection status, subscribed chat IDs, typing users per chat (<code>Map&lt;chatId, Set&lt;userId&gt;&gt;</code>), and online user IDs. Export selector hooks (<code>useConnectionStatus</code>, <code>useTypingUsers(chatId)</code>, <code>useIsUserOnline(userId)</code>) and action functions.</li>
-      </ul>
-
-      <div class="callout" style="margin:0.75rem 0;">
-        <span class="callout-icon">&#x1f4a1;</span>
-        <div><strong>Prompting lesson:</strong> When creating infrastructure, describe the <em>contract</em> (what each module exports and what it depends on) rather than the implementation. Claude will choose the right patterns if you explain the responsibilities clearly.</div>
-      </div>
-
-      <details class="hints-toggle">
-        <summary>Hints &amp; key files</summary>
-        <div class="hints-content">
-          <ul>
-            <li><code>reconnecting-websocket</code> is already installed as a dependency</li>
-            <li>TanStack Store is already used in the project &mdash; see <code>src/stores/theme-store.ts</code> for the pattern (<code>useStore</code> with selectors)</li>
-            <li>The <code>WSClient</code> should be a singleton &mdash; export a <code>wsClient</code> instance</li>
-            <li>Keep the store actions as plain functions (not methods) so the hook can call them directly</li>
-            <li>The typing store should track <code>Map&lt;chatId, Set&lt;userId&gt;&gt;</code> so the UI can show "Alice is typing&hellip;" per chat</li>
-            <li>Tip: copy the <strong>WebSocket Events table</strong> from the Reference section into your prompt so Claude knows every event name and payload shape</li>
-          </ul>
-        </div>
-      </details>
-
-      <h3>What you should see</h3>
-      <ul class="checklist" data-feature="5">
-        <li onclick="toggleCheck(this)">Three new files created: <code>ws-types.ts</code>, <code>ws-client.ts</code>, <code>ws-store.ts</code></li>
-        <li onclick="toggleCheck(this)">No runtime errors (these files are not yet used by any component)</li>
-        <li onclick="toggleCheck(this)">TypeScript compiles cleanly</li>
-      </ul>
-
-      <button class="complete-btn" onclick="markComplete(5, this)">Mark as Complete</button>
-    </div>
-  </div>
-
-  <!-- Step 6: WebSocket Hook -->
-  <div class="card" id="feature-6" data-feature="6">
-    <div class="card-header" onclick="toggleCard(this.parentElement)">
-      <div class="card-number"><span>6</span></div>
-      <div class="card-info">
-        <div class="card-title">Create WebSocket Hook</div>
-        <div class="card-meta">~25 min &middot; Event Handlers, Query Cache Sync, Typing Indicator</div>
-      </div>
-      <div class="card-chevron">&#x276F;</div>
-    </div>
-    <div class="card-body">
-      <p>Create the React hook that ties everything together. This hook connects the WebSocket client to the TanStack Query cache so that real-time events update the UI instantly without polling or refetching.</p>
-
-      <h3>How to prompt this</h3>
-      <p style="font-size:0.88rem;margin-bottom:0.75rem;">Tell Claude to create <code>src/hooks/use-websocket.ts</code> with a <code>useWebSocketConnection</code> hook that:</p>
-      <ul style="font-size:0.88rem;padding-left:1.5rem;margin-bottom:0.5rem;">
-        <li><strong>Connects on mount</strong> using the <code>wsClient</code> singleton and tracks connection status in the ws-store</li>
-        <li><strong>Invalidates all queries on reconnect</strong> to catch up on events missed while disconnected</li>
-        <li><strong>Handles incoming events</strong> by updating the TanStack Query cache directly with <code>queryClient.setQueryData()</code> (NOT <code>invalidateQueries</code> &mdash; direct cache updates are instant, invalidation causes a loading flash)</li>
-        <li><strong>Key handlers:</strong> <code>message</code> (append to chat messages + update lastMessage), <code>message_edited</code> / <code>message_deleted</code>, <code>typing</code> / <code>stop_typing</code> (update ws-store), <code>user_online</code> / <code>user_offline</code>, <code>read_receipt</code>, <code>reaction_added</code> / <code>reaction_removed</code>, <code>added_to_chat</code> (invalidate chat list)</li>
-        <li>Also export a <strong><code>useTypingIndicator(chatId)</code></strong> hook that sends <code>typing</code> / <code>stop_typing</code> events with debouncing</li>
-        <li><strong>Mount the hook</strong> in <code>src/routes/_app.tsx</code> so it runs for all authenticated routes</li>
-      </ul>
-
-      <div class="callout" style="margin:0.75rem 0;">
-        <span class="callout-icon">&#x1f4a1;</span>
-        <div><strong>Prompting lesson:</strong> This is the most complex step. Break it into two prompts if needed: first create the hook with connection management and a few key handlers (message, typing, presence), then add the remaining handlers (reactions, read receipts, edit/delete). Iterate if cache updates are not working correctly.</div>
-      </div>
-
-      <details class="hints-toggle">
-        <summary>Hints &amp; key files</summary>
-        <div class="hints-content">
-          <ul>
-            <li>Chat messages use <code>infiniteQueryOptions</code> with cursor-based pagination &mdash; updating requires working with the <code>pages</code> array: <code>queryClient.setQueryData(key, old =&gt; ({ ...old, pages: old.pages.map(...) }))</code></li>
-            <li>Chat list query key is in <code>src/queries/chats.ts</code> &mdash; look at <code>chatsQueryOptions</code></li>
-            <li>Messages query key pattern: <code>['chats', chatId, 'messages']</code></li>
-            <li>Reference the <strong>WebSocket Events table</strong> (Reference section) for exact payload shapes when writing handlers</li>
-            <li>Reference the <strong>Swagger docs</strong> for the response shapes of chat and message queries (so cache updates match the API types)</li>
-            <li>Use <code>queryClient.setQueryData</code> for instant updates, <code>queryClient.invalidateQueries</code> only on reconnect</li>
-            <li><code>_app.tsx</code> is the right place to mount <code>useWebSocketConnection()</code></li>
-            <li>For <code>useTypingIndicator</code>: use a ref to track the timeout, send <code>typing</code> immediately on input, debounce <code>stop_typing</code></li>
-          </ul>
-        </div>
-      </details>
-
-      <h3>What you should see</h3>
-      <ul class="checklist" data-feature="6">
-        <li onclick="toggleCheck(this)">WebSocket connects automatically when you sign in (check console/Network tab)</li>
-        <li onclick="toggleCheck(this)">Opening a chat subscribes to it via WebSocket</li>
-        <li onclick="toggleCheck(this)">Connection status store updates (connected/disconnected/reconnecting)</li>
-        <li onclick="toggleCheck(this)">The app is wired for real-time events</li>
-      </ul>
-
-      <button class="complete-btn" onclick="markComplete(6, this)">Mark as Complete</button>
-    </div>
-  </div>
-
-  <!-- Step 7: Go Live -->
-  <div class="card" id="feature-7" data-feature="7">
-    <div class="card-header" onclick="toggleCard(this.parentElement)">
-      <div class="card-number"><span>7</span></div>
-      <div class="card-info">
         <div class="card-title">Go Live &mdash; Chat with Participants</div>
-        <div class="card-meta">~15 min &middot; Social, Group Chat, Real-time Testing</div>
+        <div class="card-meta">~40 min &middot; Social, Group Chat, Real-time Testing, Debugging</div>
       </div>
       <div class="card-chevron">&#x276F;</div>
     </div>
     <div class="card-body">
-      <p>Everything is wired up. Time to test the full real-time experience with other workshop participants.</p>
+      <p>Everything is wired up. Time to test the full real-time experience with other workshop participants. Use this session to chat, find bugs, and iterate with Claude to fix them.</p>
 
       <h3>How to do this</h3>
       <ol style="font-size:0.88rem;padding-left:1.5rem;margin-bottom:0.5rem;">
-        <li>Go to the <strong>Contacts page</strong> and add a colleague by email</li>
-        <li>Ask them to accept (or accept their request)</li>
-        <li>Start a <strong>direct chat</strong> using the "+" button in the chat sidebar</li>
+        <li>Start a <strong>direct chat</strong> using the "+" button in the chat sidebar &mdash; pick a colleague from your contacts list</li>
         <li>Send messages back and forth &mdash; they should appear <strong>instantly</strong> on both sides</li>
         <li>The instructor has added everyone to a <strong>hackathon group chat</strong> &mdash; open it and send a message</li>
+        <li>Test <strong>typing indicators</strong> &mdash; type in the input and check if others see the indicator</li>
+        <li>Test <strong>online/offline status</strong> &mdash; check if you can see who is online</li>
+        <li>Try your Hour 1 features in a real conversation: emoji picker, new chat popover, pin/archive</li>
+        <li>If something breaks, describe the symptom to Claude and iterate until it works</li>
       </ol>
 
       <div class="callout" style="margin:0.75rem 0;">
@@ -1289,20 +1346,60 @@ pnpm dev</code></pre>
             <li>If the group chat doesn't show up: the <code>added_to_chat</code> handler should invalidate the chat list query</li>
             <li>If typing indicators don't work: verify <code>useTypingIndicator</code> sends events and the store updates</li>
             <li>Check the browser console for WebSocket errors or failed event parsing</li>
+            <li>If optimistic updates cause duplicates: ensure the temp message ID is replaced when the real one arrives via WebSocket</li>
           </ul>
         </div>
       </details>
 
+      <details class="hints-toggle">
+        <summary>Prompt (for debugging)</summary>
+        <div class="hints-content">
+          <div class="prompt-box">
+            <span class="prompt-label">Prompt</span>
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+Help me debug real-time messaging. Open the app and verify:
+1. The WebSocket connects automatically on sign-in (check the console/Network tab for the WS connection)
+2. Start a direct chat with a contact and send a message — does it appear on the other side instantly?
+3. Open the hackathon group chat and send a message — do other participants see it in real time?
+4. Check if typing indicators appear when someone is typing
+5. Check if online/offline status updates as participants join and leave
+
+If something doesn't work, check the browser console for WebSocket errors and tell me what you find.</div>
+        </div>
+      </details>
+
       <h3>What you should see</h3>
-      <ul class="checklist" data-feature="7">
+      <ul class="checklist" data-feature="5">
         <li onclick="toggleCheck(this)">Messages appear instantly on both sides of a direct chat</li>
         <li onclick="toggleCheck(this)">The hackathon group chat shows messages from all participants</li>
         <li onclick="toggleCheck(this)">Typing indicators show when someone is typing</li>
         <li onclick="toggleCheck(this)">Online/offline status updates as participants join and leave</li>
-        <li onclick="toggleCheck(this)">Reactions sync in real time (if implemented)</li>
+        <li onclick="toggleCheck(this)">All Hour 1 features work in a real conversation</li>
       </ul>
 
-      <button class="complete-btn" onclick="markComplete(7, this)">Mark as Complete</button>
+      <button class="complete-btn" onclick="markComplete(5, this)">Mark as Complete</button>
+    </div>
+  </div>
+
+  <!-- ============ BONUS ============ -->
+  <div class="section-label">
+    <h2>Bonus Challenges</h2>
+  </div>
+
+  <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:1rem;">Finished early? Try these stretch goals:</p>
+
+  <div class="bonus-grid">
+    <div class="bonus-item">
+      <strong>Typing indicators</strong>
+      Send and display typing events over WebSocket with a bouncing dots animation.
+    </div>
+    <div class="bonus-item">
+      <strong>Message reactions</strong>
+      Add emoji reaction buttons on hover with real-time sync via WebSocket.
+    </div>
+    <div class="bonus-item">
+      <strong>Got a cool idea?</strong>
+      Think of a feature you wish the app had and try implementing it with Claude. Describe the behavior you want and see how far you get.
     </div>
   </div>
 
@@ -1354,28 +1451,6 @@ pnpm dev</code></pre>
       <li>If Claude asks which file to edit, give it the exact path.</li>
       <li>You can ask Claude to "read <code>src/components/chat/chat-panel.tsx</code> and tell me what props it accepts".</li>
     </ul>
-  </div>
-
-  <!-- ============ BONUS ============ -->
-  <div class="section-label">
-    <h2>Bonus Challenges</h2>
-  </div>
-
-  <p style="font-size:0.9rem;color:var(--text-muted);margin-bottom:1rem;">Finished early? Try these stretch goals:</p>
-
-  <div class="bonus-grid">
-    <div class="bonus-item">
-      <strong>Typing indicators</strong>
-      Send and display typing events over WebSocket with a bouncing dots animation.
-    </div>
-    <div class="bonus-item">
-      <strong>Message reactions</strong>
-      Add emoji reaction buttons on hover with real-time sync via WebSocket.
-    </div>
-    <div class="bonus-item">
-      <strong>Image upload</strong>
-      Add a file attachment button next to the emoji picker that uses <code>@better-upload/client</code> to upload images to chat.
-    </div>
   </div>
 
   <!-- ============ REFERENCE ============ -->
@@ -1573,7 +1648,7 @@ pnpm dev</code></pre>
 
   function restoreCompleted() {
     const state = loadProgress()
-    for (let i = 1; i <= 7; i++) {
+    for (let i = 1; i <= 5; i++) {
       if (state[`completed-${i}`]) {
         const card = document.getElementById(`feature-${i}`)
         if (card) {
@@ -1592,12 +1667,12 @@ pnpm dev</code></pre>
   function updateProgress() {
     const state = loadProgress()
     let completed = 0
-    for (let i = 1; i <= 7; i++) {
+    for (let i = 1; i <= 5; i++) {
       if (state[`completed-${i}`]) completed++
     }
-    const pct = Math.round((completed / 7) * 100)
+    const pct = Math.round((completed / 5) * 100)
     document.getElementById('progressFill').style.width = `${pct}%`
-    document.getElementById('progressText').textContent = `${completed} / 7`
+    document.getElementById('progressText').textContent = `${completed} / 5`
   }
 
   // --- Reset ---

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { useScrollToBottom } from "@/hooks/use-scroll-to-bottom"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -24,6 +24,7 @@ interface ChatPanelProps {
 
 export function ChatPanel({ chat, messages, currentUserId, onSendMessage, senderNames }: ChatPanelProps) {
   const [inputValue, setInputValue] = useState("")
+  const inputRef = useRef<HTMLInputElement>(null)
   const messagesEndRef = useScrollToBottom([chat?.id, messages.length])
 
   const isGroup = chat?.type === "group"
@@ -95,6 +96,7 @@ export function ChatPanel({ chat, messages, currentUserId, onSendMessage, sender
       <form onSubmit={handleSubmit} className="border-t border-border bg-card p-4">
         <InputGroup className="h-10">
           <InputGroupInput
+            ref={inputRef}
             placeholder="Type a message..."
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}

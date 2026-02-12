@@ -9,7 +9,20 @@ interface ChatSidebarProps {
 }
 
 export function ChatSidebar({ chats }: ChatSidebarProps) {
-  const activeChats = chats.filter((chat) => !chat.archivedAt)
+  const activeChats = chats
+    .filter((chat) => !chat.archivedAt)
+    .sort((a, b) => {
+      // Pinned chats first
+      if (a.pinnedAt && !b.pinnedAt) return -1
+      if (!a.pinnedAt && b.pinnedAt) return 1
+      if (a.pinnedAt && b.pinnedAt) {
+        return new Date(b.pinnedAt).getTime() - new Date(a.pinnedAt).getTime()
+      }
+      // Then by last message time
+      const aTime = a.lastMessageAt ? new Date(a.lastMessageAt).getTime() : 0
+      const bTime = b.lastMessageAt ? new Date(b.lastMessageAt).getTime() : 0
+      return bTime - aTime
+    })
 
   return (
     <div className="flex h-full w-full flex-col border-r border-border bg-card">
